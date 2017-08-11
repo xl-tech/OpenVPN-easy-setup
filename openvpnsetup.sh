@@ -18,7 +18,7 @@
 IAM=$(whoami)
 if [ ${IAM} != "root" ]; then
     echo "You must be root to use this script"
-	exit 1
+    exit 1
 fi
 
 #check for tun/tap
@@ -26,13 +26,13 @@ if [ -c /dev/net/tun ]; then
     echo TUN/TAP is enabled
 else
     echo TUN/TAP is disabled. Contact your VPS provider to enable it
-	exit 1
+    exit 1
 fi
 	
 #enable IPv4 forwarding
 if sysctl net.ipv4.ip_forward |grep 0; then
     sysctl -w net.ipv4.ip_forward=1
-	echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+    echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
 else
     echo "IPv4 forwarding is already enabled"
 fi
@@ -44,10 +44,10 @@ deb_packages="openssl openvpn easy-rsa iptables netfilter-persistent iptables-pe
 if cat /etc/*release | grep ^NAME | grep CentOS; then
     yum -y install epel-release
     yum -y install $yum_packages
-	systemctl disable firewalld & systemctl stop firewalld
+    systemctl disable firewalld & systemctl stop firewalld
 elif cat /etc/*release | grep ^NAME | grep Ubuntu; then
     apt-get install -y $deb_packages
-	ufw disable
+    ufw disable
 else
     echo "Unsupported distro, sorry"
     exit 1;
@@ -81,7 +81,7 @@ read n
 case $n in
     1) PORT="tcp 443";;
     2) PORT="udp 1194";;
-	3) echo -n "Enter proto and port (like tcp 80 or udp 53): " & read -e PORT;;
+    3) echo -n "Enter proto and port (like tcp 80 or udp 53): " & read -e PORT;;
     *) invalid option;;
 esac
 
@@ -181,7 +181,7 @@ if (( "$IPV6E" == 1 )); then
 #enable IPv6 forwarding
 if sysctl net.ipv6.conf.all.forwarding |grep 0; then
     sysctl -w net.ipv6.conf.all.forwarding=1
-	echo "net.ipv6.conf.all.forwarding = 1" >> /etc/sysctl.conf
+    echo "net.ipv6.conf.all.forwarding = 1" >> /etc/sysctl.conf
 else
     echo "IPv6 forwarding is already enabled"
 fi
