@@ -4,7 +4,7 @@
 # for CentOS 7.x and Ubuntu Server 16.x / 17.x
 # by xl-tech https://github.com/xl-tech
 #
-# Version 0.1 12.08.17
+# Version 0.1 12 August 2017
 #
 # Use only on fresh installed machine! It can rewrite your firewall rules
 # or your current OpenVPN config (if you have it before).
@@ -353,13 +353,13 @@ if cat /etc/*release | grep ^NAME | grep CentOS; then
      systemctl enable iptables & systemctl start iptables
      systemctl enable ip6tables & systemctl start ip6tables
      systemctl enable openvpn@server & systemctl start openvpn@server
-	 systemctl start iptables & systemctl start ip6tables
+     systemctl restart iptables & systemctl restart ip6tables
 elif cat /etc/*release | grep ^NAME | grep Ubuntu; then
      cp /tmp/ip6tables /etc/iptables/rules.v6
      cp /tmp/iptables /etc/iptables/rules.v4
      systemctl enable netfilter-persistent & systemctl start netfilter-persistent
      systemctl enable openvpn@server & systemctl start openvpn@server
-	 systemctl restart netfilter-persistent
+     systemctl restart netfilter-persistent
 fi
 
 #generate client config
