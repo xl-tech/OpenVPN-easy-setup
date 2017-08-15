@@ -1,10 +1,10 @@
 #! /bin/bash
 #
 # Express setup of OpenVPN server 
-# for CentOS 7.x and Ubuntu Server 16.x / 17.x
+# for CentOS 7.x, RHEL 7.x and Ubuntu Server 16.x / 17.x
 # by xl-tech https://github.com/xl-tech
 #
-# Version 0.1 12 August 2017
+# Version 0.2 15 August 2017
 #
 # Use only on fresh installed machine! It can rewrite your firewall rules
 # or your current OpenVPN config (if you have it before).
@@ -28,7 +28,7 @@ else
     echo TUN/TAP is disabled. Contact your VPS provider to enable it
     exit 1
 fi
-	
+
 #enable IPv4 forwarding
 if sysctl net.ipv4.ip_forward |grep 0; then
     sysctl -w net.ipv4.ip_forward=1
@@ -48,6 +48,12 @@ if cat /etc/*release | grep ^NAME | grep CentOS; then
 elif cat /etc/*release | grep ^NAME | grep Ubuntu; then
     apt-get install -y $deb_packages
     ufw disable
+elif cat /etc/*release | grep ^NAME | grep "Red Hat Enterprise Linux Server"; then
+    yum -y install epel-release
+    #check if epel-release installed
+    [ -z "$(yum repolist | grep ^epel)" ] && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    yum -y install $yum_packages
+    [ ! -z "$(systemctl | grep firewalld)" ] && ( systemctl disable firewalld & systemctl stop firewalld )
 else
     echo "Unsupported distro, sorry"
     exit 1;
@@ -123,11 +129,11 @@ echo "IPv6 - $IPV6E (1 is enabled, 0 is disabled)"
 read -rsp $'Press enter to continue...\n'
 
 #create dirs and files
-mkdir /etc/openvpn/easy-rsa
-mkdir /etc/openvpn/easy-rsa/keys
-mkdir /etc/openvpn/logs
-mkdir /etc/openvpn/bundles
-mkdir /etc/openvpn/ccd
+mkdir -p /etc/openvpn/easy-rsa
+mkdir -p /etc/openvpn/easy-rsa/keys
+mkdir -p /etc/openvpn/logs
+mkdir -p /etc/openvpn/bundles
+mkdir -p /etc/openvpn/ccd
 touch /etc/openvpn/easy-rsa/keys/index.txt
 touch /etc/openvpn/easy-rsa/keys/serial
 echo 00 >> /etc/openvpn/easy-rsa/keys/serial
@@ -136,6 +142,8 @@ if cat /etc/*release | grep ^NAME | grep CentOS; then
     cp /usr/share/easy-rsa/2.0/* /etc/openvpn/easy-rsa
 elif cat /etc/*release | grep ^NAME | grep Ubuntu; then
     cp /usr/share/easy-rsa/* /etc/openvpn/easy-rsa
+elif cat /etc/*release | grep ^NAME | grep "Red Hat Enterprise Linux Server"; then
+	cp /usr/share/easy-rsa/2.0/* /etc/openvpn/easy-rsa
 fi
 #vars for certs
 export EASY_RSA="/etc/openvpn/easy-rsa"
