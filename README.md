@@ -1,4 +1,5 @@
 # OpenVPN-easy-setup
+
 Bash script for easy and fast OpenVPN server deploy
 
 For CentOS 7.x and Ubuntu Server 17.x only. (Ubuntu Server 16.x is supported, but it have OpenVPN 2.3.x)
@@ -11,7 +12,7 @@ Features:
 - Choose of cipher;
 - IPv6 support.
 
-Usage: ./openvpnsetup.sh 
+> Usage: ./openvpnsetup.sh 
 
 Before enabling IPv6 support ensure that your machine have IPv6 address.
 Note: iptables rule allow port 22 tcp (ssh) by default, if you have sshd on another port modify script before execution.
