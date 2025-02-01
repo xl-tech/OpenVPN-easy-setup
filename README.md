@@ -1,4 +1,4 @@
-# OpenVPN-easy-setup
+# OpenVPN-easy-setup (OUTDATED, PLEASE DO NOT USE)
 Bash script for easy and fast OpenVPN server deploy
 
 For CentOS 7.x and Ubuntu Server 17.x only. (Ubuntu Server 16.x is supported, but it have OpenVPN 2.3.x)
